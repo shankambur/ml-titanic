@@ -5,6 +5,10 @@ import shap
 import matplotlib.pyplot as plt
 
 import numpy as np
+import sklearn, xgboost, shap
+print("sklearn:", sklearn.__version__)
+print("xgboost:", xgboost.__version__)
+print("shap:", shap.__version__)
 
 print("Start the streamlie******")
 def clean_feature_name(name, value, input_data):
@@ -63,15 +67,15 @@ def load_model():
     # print("scaler:",scaler)
     # print("Mean:", scaler.mean_)
     # print("Scale:", scaler.scale_)
-    feature_names = preprocessor.get_feature_names_out()
+    # feature_names = preprocessor.get_feature_names_out()
     # print(" loading model : feature_names",feature_names)
-    clean_names = [name.split("__")[1] for name in feature_names]
+    # clean_names = [name.split("__")[1] for name in feature_names]
     # print(" loading model : clean_names",clean_names)
-    return pipeline, preprocessor, model, clean_names
+    return pipeline, preprocessor, model
 
 
 
-pipeline, preprocessor, model, clean_names = load_model()
+pipeline, preprocessor, model = load_model()
 
 @st.cache_resource
 def get_explainer(_model):
@@ -134,9 +138,11 @@ if st.button("Predict"):
     input_data["Sex"] = input_data["Sex"].str.lower()
     input_data["Embarked"] = input_data["Embarked"].str.upper()
     print("input_data_afterUC_LC:\n",input_data)
-    X_transformed = preprocessor.transform(input_data)
+    # X_transformed = preprocessor.transform(input_data)
+    X_transformed = pipeline[:-1].transform(input_data)
     print("X_transformed:\n",X_transformed)
-    X_transformed_df = pd.DataFrame(X_transformed,columns=clean_names)
+    # X_transformed_df = pd.DataFrame(X_transformed,columns=clean_names)
+    X_transformed_df = pd.DataFrame(X_transformed,columns=pipeline[:-1].get_feature_names_out())
     print("X_transformed_df:\n",X_transformed_df)
     
 
