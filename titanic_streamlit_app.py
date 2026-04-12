@@ -75,7 +75,7 @@ pipeline, preprocessor, model, clean_names = load_model()
 @st.cache_resource(hash_funcs={type(model): id})
 def get_explainer(model):
     print("Creating SHAP explainer once...")
-    return shap.TreeExplainer(model)
+    return shap.TreeExplainer(model.get_booster())
 
 explainer = get_explainer(model)
 print("explainer:\n",explainer)
