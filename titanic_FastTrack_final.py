@@ -208,9 +208,9 @@ print("df['Embarked'].unique():\n",df['Embarked'].unique())
 # ▶️ Step 7: Train Model
 print("Started training")
 grid_pipeline_XGB.fit(X_train, y_train)
-joblib.dump(grid_pipeline_XGB,"titanic_pipeline_v1.pkl")
-print("titanic_pipeline_v1.pkl saved successfully")
-grid_pipeline_XGB = joblib.load("titanic_pipeline_v1.pkl")
+joblib.dump(grid_pipeline_XGB,"titanic_final_model.pkl")
+print("titanic_final_model.pkl saved successfully")
+grid_pipeline_XGB = joblib.load("titanic_final_model.pkl")
 print("Best_Params_grid_pipeline_XGB:", grid_pipeline_XGB.best_params_)
 print("Best_Score_grid_pipeline_XGB:", grid_pipeline_XGB.best_score_)
 #Evaluation
