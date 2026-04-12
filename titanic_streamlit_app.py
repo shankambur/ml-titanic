@@ -28,18 +28,19 @@ def clean_feature_name(name, value, input_data):
      return f"{name} ({round(original_value, 2)})"
 
     # 🎯 Sex
-    if "Sex_female" in name:
-        return "Female" if value == 1 else "Male"
+    # 🎯 Sex
+    if "Sex_male" in name and value == 1:
+        return "Male"
 
-    if "Sex_male" in name:
-        return "Male" if value == 1 else "Female"
+    if "Sex_female" in name and value == 1:
+        return "Female"
 
     # 🎯 Pclass
-    if "Pclass" in name and value == 1:
+    if "Pclass_" in name and value == 1:
         return f"Class {name.split('_')[-1]}"
 
     # 🎯 Embarked
-    if "Embarked" in name and value == 1:
+    if "Embarked_" in name and value == 1:
         return f"Embarked {name.split('_')[-1]}"
 
     return None  # skip inactive features
@@ -72,10 +73,10 @@ def load_model():
 
 pipeline, preprocessor, model, clean_names = load_model()
 
-@st.cache_resource(hash_funcs={type(model): id})
-def get_explainer(model):
+@st.cache_resource
+def get_explainer(_model):
     print("Creating SHAP explainer once...")
-    return shap.TreeExplainer(model.get_booster())
+    return shap.TreeExplainer(_model)
 
 explainer = get_explainer(model)
 print("explainer:\n",explainer)
