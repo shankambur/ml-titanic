@@ -208,13 +208,19 @@ print("df['Embarked'].unique():\n",df['Embarked'].unique())
 # ▶️ Step 7: Train Model
 print("Started training")
 grid_pipeline_XGB.fit(X_train, y_train)
-joblib.dump(grid_pipeline_XGB,"titanic_final_model.pkl")
-print("titanic_final_model.pkl saved successfully")
-grid_pipeline_XGB = joblib.load("titanic_final_model.pkl")
+joblib.dump(grid_pipeline_XGB,"titanic_final_model_v2.pkl")
+print("titanic_final_model_v2.pkl saved successfully")
+grid_pipeline_XGB = joblib.load("titanic_final_model_v2.pkl")
 print("Best_Params_grid_pipeline_XGB:", grid_pipeline_XGB.best_params_)
 print("Best_Score_grid_pipeline_XGB:", grid_pipeline_XGB.best_score_)
 #Evaluation
 
+pipeline = grid_pipeline_XGB.best_estimator_
+encoder = pipeline.named_steps['preprocessing']\
+    .named_transformers_['cat']\
+    .named_steps['encoder']
+
+print("encoder::\n",encoder)
 
 # Accuracy - grid
 train_accuracy_grid_pipeline_XGB = grid_pipeline_XGB.score(X_train, y_train)

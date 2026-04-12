@@ -50,7 +50,7 @@ def clean_feature_name(name, value, input_data):
 def load_model():
     print("Loading model only once...")
     
-    grid = joblib.load("titanic_final_model.pkl")
+    grid = joblib.load("titanic_final_model_v2.pkl")
     pipeline = grid.best_estimator_
 
 
