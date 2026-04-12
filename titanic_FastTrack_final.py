@@ -170,7 +170,7 @@ num_pipeline = Pipeline([
 # Categorical Pipeline
 cat_pipeline = Pipeline([
     ('imputer', SimpleImputer(strategy='most_frequent')), # Handing Missing values
-    ('encoder', OneHotEncoder(handle_unknown='ignore'))
+    ('encoder', OneHotEncoder(handle_unknown='ignore', sparse_output=False))
 ])
 #ColumnTransformer
 preprocessor = ColumnTransformer([
