@@ -8,8 +8,8 @@ import numpy as np
 
 print("Start the streamlie******")
 def clean_feature_name(name, value, input_data):
-    print("clean_feature_name:Name:\n",name)
-    print("clean_feature_name:Value:\n",value)
+    # print("clean_feature_name:Name:\n",name)
+    # print("clean_feature_name:Value:\n",value)
     name = name.replace("cat__", "").replace("num__", "")
 
     # 🎯 Numeric features → show original value
@@ -55,18 +55,18 @@ def load_model():
 
 
     preprocessor = pipeline.named_steps['preprocessing']
-    print("preprocessor:\n",preprocessor)
+    # print("preprocessor:\n",preprocessor)
     model = pipeline.named_steps['model']
     encoder_cat = preprocessor.named_transformers_['cat'].named_steps['encoder']
-    print("Encoder_Categories:", encoder_cat.categories_)
+    # print("Encoder_Categories:", encoder_cat.categories_)
     scaler = preprocessor.named_transformers_['num'].named_steps['scaler']
-    print("scaler:",scaler)
-    print("Mean:", scaler.mean_)
-    print("Scale:", scaler.scale_)
+    # print("scaler:",scaler)
+    # print("Mean:", scaler.mean_)
+    # print("Scale:", scaler.scale_)
     feature_names = preprocessor.get_feature_names_out()
-    print(" loading model : feature_names",feature_names)
+    # print(" loading model : feature_names",feature_names)
     clean_names = [name.split("__")[1] for name in feature_names]
-    print(" loading model : clean_names",clean_names)
+    # print(" loading model : clean_names",clean_names)
     return pipeline, preprocessor, model, clean_names
 
 
@@ -79,7 +79,7 @@ def get_explainer(_model):
     return shap.TreeExplainer(_model)
 
 explainer = get_explainer(model)
-print("explainer:\n",explainer)
+# print("explainer:\n",explainer)
 
 def get_feature_emoji(name):
     if "Age" in name or "Child" in name or "Adult" in name:
