@@ -147,8 +147,7 @@ if st.button("Predict"):
     
 
     # ✅ Prediction
-    print("pipeline.predict_proba(input_data)\n",pipeline.predict_proba(input_data))
-    prob = pipeline.predict_proba(input_data)[0][1]
+    with st.spinner("Predicting..."): prob = pipeline.predict_proba(input_data)[0][1]
     print("prob:\n",prob)
     pred = int(prob >= THRESHOLD)
     # st.write("Transformed Data:", X_transformed_df)
@@ -163,9 +162,9 @@ if st.button("Predict"):
         st.warning("⚠️ Model uncertain")
 
     if pred == 1:
-        st.success("✅ Likely to Survive")
+        st.success(f"✅ Survives ({prob:.2%})")
     else:
-        st.error("❌ Not Likely to Survive")
+        st.error(f"❌ Not Survive ({prob:.2%})")
 
     # 🧠 SHAP EXPLANATION
     st.subheader("🔍 Why this prediction? (SHAP)")
