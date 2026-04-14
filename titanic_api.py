@@ -1,3 +1,4 @@
+print("Starting Titanic API...")
 from fastapi import FastAPI
 from pydantic import BaseModel
 import joblib
@@ -9,7 +10,15 @@ app = FastAPI()
 THRESHOLD = 0.385
 
 # Load model once
-model = joblib.load("titanic_final_model_v2.pkl")
+import joblib
+
+try:
+    print("Loading model...")
+    model = joblib.load("titanic_final_model_v2.pkl")
+    print("Model loaded successfully")
+except Exception as e:
+    print("Model load failed:", e)
+    model = None
 
 
 # Input schema
@@ -67,14 +76,6 @@ def predict(data: Passenger):
 
 
 
-import os
-
-if __name__ == "__main__":
-    import uvicorn
-    port = int(os.environ.get("PORT", 10000))
-    uvicorn.run("titanic_api:app", host="0.0.0.0", port=port)
-
-    
 # uvicorn <filename_without_.py>:<app_variable>
 # uvicorn titanic_api:app --reload
 #  After running Open:  http://127.0.0.1:8000/docs
