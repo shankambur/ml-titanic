@@ -1,171 +1,142 @@
-# 🚢 Titanic Survival Prediction (End-to-End ML Project)
+# Titanic Survival Prediction Project
 
-## 📌 Overview
+## About this project
 
-This project is an **end-to-end Machine Learning application** that predicts whether a passenger survived the Titanic disaster using structured data.
+This is my end-to-end machine learning project where I tried to predict whether a passenger survived in Titanic or not.
 
-It covers:
+In this project I worked on:
 
-* Data preprocessing & feature engineering
-* Model training & hyperparameter tuning
-* Pipeline-based ML workflow
-* Model explainability (SHAP)
-* Deployment using Streamlit Cloud
-
-👉 **Live App: https://shank-titanic-ml.streamlit.app/
-👉 **GitHub Repo:** https://github.com/shankambur/ml-titanic
+* Data cleaning
+* Feature engineering
+* Model building
+* Deployment using Streamlit
+* Model explainability using SHAP
 
 ---
 
-## 🎯 Problem Statement
+## Problem statement
 
-Build a machine learning model to predict passenger survival based on features like age, gender, ticket class, fare, and embarkation port.
-
----
-
-## 📊 Dataset
-
-* Titanic dataset (Kaggle)
-* Target variable: `Survived` (0 = No, 1 = Yes)
+Given passenger details like age, gender, class, fare, etc., predict whether the passenger survived or not.
 
 ---
 
-## ⚙️ Feature Engineering
+## Dataset
 
-Key transformations:
+I used Titanic dataset.
 
-* **FamilySize** = SibSp + Parch + 1
-* **IsAlone** = FamilySize == 1
-* **Title extraction** from Name (Mr, Mrs, Miss, Rare)
-* Dropped features:
+Target column:
 
-  * `Cabin` (too many missing values)
-  * `Ticket`, `PassengerId` (low predictive value)
+* Survived (0 = No, 1 = Yes)
 
 ---
 
-## 🧹 Data Preprocessing
+## Feature Engineering
 
-### Numerical Features
+I created some useful features:
+
+* FamilySize = SibSp + Parch + 1
+* IsAlone → whether passenger is alone or not
+* Title extracted from Name (Mr, Mrs, Miss, etc.)
+
+Dropped columns:
+
+* Cabin (too many missing values)
+* Ticket, PassengerId (not useful for prediction)
+
+---
+
+## Preprocessing
+
+Numerical columns:
 
 * Age, Fare
-* Missing values → Median imputation
-* Scaling → StandardScaler
+* Filled missing values using median
+* Used StandardScaler
 
-### Categorical Features
+Categorical columns:
 
 * Sex, Embarked, Pclass
-* Missing values → Most frequent
-* Encoding → OneHotEncoder
+* Filled missing values using most frequent
+* Used OneHotEncoder
 
 ---
 
-## 🏗️ ML Pipeline
+## Model
 
-```python
-Pipeline:
-    → ColumnTransformer (Preprocessing)
-    → XGBoost Classifier (Model)
-```
-
-* Ensures consistent preprocessing during training and inference
-* Prevents data leakage
-* Simplifies deployment
-
----
-
-## 🤖 Models Used
+I tried multiple models:
 
 * Logistic Regression
 * Random Forest
-* XGBoost (**final selected model**)
-
----
-
-## 🔍 Hyperparameter Tuning
-
-Used `GridSearchCV` to tune:
-
-* n_estimators
-* max_depth
-* learning_rate
-
----
-
-## 📈 Model Performance
-
-Evaluated using:
-
-* Accuracy
-* Confusion Matrix
-* Classification Report
-
----
-
-## 🧠 Model Explainability (SHAP)
-
-* Implemented SHAP for **local prediction explanations**
-* Displays:
-
-  * Top contributing features
-  * Feature impact direction (+ / -)
-  * Waterfall plot visualization
-
----
-
-## 🚀 Deployment
-
-* Built interactive UI using **Streamlit**
-* Deployed on **Streamlit Cloud**
-* Supports real-time predictions
-
----
-
-## ⚠️ Challenges & Solutions
-
-### ❌ Issue: ColumnTransformer error in cloud
-
-✅ Solution: Used full pipeline (`pipeline.predict()`) instead of manual transform
-
-### ❌ Issue: Version mismatch (sklearn, shap, xgboost)
-
-✅ Solution: Locked versions in `requirements.txt`
-
-### ❌ Issue: Feature mismatch
-
-✅ Solution: Used `pipeline.get_feature_names_out()`
-
----
-
-## 🧪 Tech Stack
-
-* Python
-* Pandas, NumPy
-* Scikit-learn
 * XGBoost
-* SHAP
-* Streamlit
-* Joblib
+
+Finally selected XGBoost because it gave better performance.
+
+Used GridSearchCV for tuning.
 
 ---
 
-## 📂 Project Structure
+## Pipeline
 
-```
-ml-titanic/
-│
-├── titanic_FastTrack.py              # Multiple model experiments
-├── titanic_FastTrack_final.py        # Final training pipeline
-├── titanic_streamlit_app.py          # Streamlit app
-├── titanic_final_model_v2.pkl        # Saved model
-├── requirements.txt
-├── runtime.txt
-└── README.md
-```
+I used sklearn Pipeline with ColumnTransformer.
+
+Reason:
+
+* Keeps preprocessing and model together
+* Helps during deployment
+* Avoids mistakes between training and prediction
 
 ---
 
-## ▶️ How to Run Locally
+## Model Explainability
+
+I used SHAP to explain predictions.
+
+It shows:
+
+* Which feature increased survival
+* Which feature decreased survival
+
+This helped me understand model behavior better.
+
+---
+
+## Deployment
+
+I created a Streamlit app.
+
+User can:
+
+* Enter passenger details
+* Get prediction
+* See explanation (SHAP)
+
+Deployed in Streamlit Cloud.
+
+---
+
+## Challenges I faced
+
+1. ColumnTransformer error in cloud
+   Fixed by using full pipeline instead of manual transform
+
+2. Version mismatch issue
+   Fixed by adding exact versions in requirements.txt
+
+3. Feature mismatch issue
+   Fixed by using pipeline.get_feature_names_out()
+
+---
+
+## Project files
+
+* titanic_FastTrack.py → tried multiple models
+* titanic_FastTrack_final.py → final training code
+* titanic_streamlit_app.py → Streamlit app
+* model.pkl → saved model
+
+---
+
+## How to run
 
 ```bash
 git clone https://github.com/shankambur/ml-titanic
@@ -176,38 +147,23 @@ streamlit run titanic_streamlit_app.py
 
 ---
 
-## 🧾 Resume Highlight
+## What I learned
 
-Built and deployed an end-to-end Machine Learning application using Scikit-learn Pipeline and XGBoost to predict Titanic passenger survival. Implemented feature engineering, hyperparameter tuning, and SHAP-based explainability. Resolved real-world deployment challenges including preprocessing pipeline issues and dependency mismatches.
-
----
-
-## 🚀 Future Improvements
-
-* Add FastAPI backend
-* Improve UI/UX
-* Add global feature importance
-* Dockerize the application
-* Add monitoring/logging
+* How to build end-to-end ML project
+* How to use Pipeline and ColumnTransformer
+* How to debug real deployment issues
+* Importance of matching library versions
+* Basics of explainable AI using SHAP
 
 ---
 
-## ⭐ Key Takeaways
+## Future improvements
 
-* End-to-end ML pipeline development
-* Real-world debugging & deployment experience
-* Explainable AI integration
-* Production-ready mindset
+* Improve UI
+* Add more features
+* Try other models
+* Deploy using FastAPI
 
----
 
-## 🙌 Acknowledgements
-
-* Kaggle Titanic Dataset
-* Scikit-learn, XGBoost, SHAP, Streamlit
-
----
-
-## 📬 Contact
-
+##Contact
 If you found this useful, feel free to shankambur@gmail.com
