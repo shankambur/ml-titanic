@@ -1,169 +1,176 @@
-# Titanic Survival Prediction Project
+# Titanic Survival Prediction with SHAP (End-to-End ML App)
 
-## About this project
+This project predicts whether a passenger survives the Titanic disaster and explains the prediction using SHAP.
 
-This is my end-to-end machine learning project where I tried to predict whether a passenger survived in Titanic or not.
-
-In this project I worked on:
-
-* Data cleaning
-* Feature engineering
-* Model building
-* Deployment using Streamlit
-* Model explainability using SHAP
+I built this as a complete ML system with:
+- Model + Pipeline
+- Explainability (SHAP)
+- FastAPI backend
+- Streamlit frontend
+- Deployment
 
 ---
 
-## Problem statement
+## Live Apps
 
-Given passenger details like age, gender, class, fare, etc., predict whether the passenger survived or not.
+### 1. Streamlit App (Direct Model)
+https://shank-titanic-ml.streamlit.app/
 
----
-
-## Dataset
-
-I used Titanic dataset.
-
-Target column:
-
-* Survived (0 = No, 1 = Yes)
+- Model runs directly inside Streamlit
+- Faster response
+- Includes SHAP explanation
 
 ---
 
-## Feature Engineering
+### 2. Streamlit App (API Version)
+https://shank-titanic-ml-api.streamlit.app/
 
-I created some useful features:
-
-* FamilySize = SibSp + Parch + 1
-* IsAlone → whether passenger is alone or not
-* Title extracted from Name (Mr, Mrs, Miss, etc.)
-
-Dropped columns:
-
-* Cabin (too many missing values)
-* Ticket, PassengerId (not useful for prediction)
+- Calls FastAPI backend
+- Uses /predict and /shap APIs
+- Shows real-world architecture
+- SHAP explanation via API
 
 ---
 
-## Preprocessing
+### FastAPI Backend
+https://ml-titanic-65cv.onrender.com/docs
 
-Numerical columns:
-
-* Age, Fare
-* Filled missing values using median
-* Used StandardScaler
-
-Categorical columns:
-
-* Sex, Embarked, Pclass
-* Filled missing values using most frequent
-* Used OneHotEncoder
+- You can test APIs here
+- Swagger UI available
 
 ---
 
-## Model
+## How it works
 
-I tried multiple models:
+### Direct App
+Streamlit → Pipeline → Prediction + SHAP
 
-* Logistic Regression
-* Random Forest
-* XGBoost
-
-Finally selected XGBoost because it gave better performance.
-
-Used GridSearchCV for tuning.
+### API App
+Streamlit → FastAPI → Pipeline → SHAP → Response
 
 ---
 
-## Pipeline
+## Features
 
-I used sklearn Pipeline with ColumnTransformer.
-
-Reason:
-
-* Keeps preprocessing and model together
-* Helps during deployment
-* Avoids mistakes between training and prediction
-
----
-
-## Model Explainability
-
-I used SHAP to explain predictions.
-
-It shows:
-
-* Which feature increased survival
-* Which feature decreased survival
-
-This helped me understand model behavior better.
+- Predict survival probability
+- Full preprocessing pipeline (imputer + scaler + encoder)
+- SHAP explanation (feature impact)
+- Waterfall plot visualization
+- API-based architecture
+- Deployed apps
 
 ---
 
-## Deployment
+## Tech Stack
 
-I created a Streamlit app.
-
-User can:
-
-* Enter passenger details
-* Get prediction
-* See explanation (SHAP)
-
-Deployed in Streamlit Cloud.
-
----
-
-## Challenges I faced
-
-1. ColumnTransformer error in cloud
-   Fixed by using full pipeline instead of manual transform
-
-2. Version mismatch issue
-   Fixed by adding exact versions in requirements.txt
-
-3. Feature mismatch issue
-   Fixed by using pipeline.get_feature_names_out()
+- Python
+- Scikit-learn
+- XGBoost
+- SHAP
+- FastAPI
+- Streamlit
+- Pandas / NumPy
+- Joblib
 
 ---
 
-## Project files
+## Model Details
 
-* titanic_FastTrack.py → tried multiple models
-* titanic_FastTrack_final.py → final training code
-* titanic_streamlit_app.py → Streamlit app
-* model.pkl → saved model
+- Model: XGBoost Classifier
+- Pipeline includes:
+  - Missing value handling
+  - Standard scaling
+  - One-hot encoding
+- Hyperparameter tuning using GridSearchCV
 
 ---
 
-## How to run
+## Screenshots
+yet to add screenshots <=== Pending
+### Prediction UI
+![Prediction](images/prediction.png)
 
-```bash
-git clone https://github.com/shankambur/ml-titanic
+### SHAP Plot
+![SHAP](images/shap.png)
+
+---
+
+## Run Locally
+
+### Clone repo
+git clone https://github.com/shankambur/ml-titanic.git
 cd ml-titanic
+
+### Install
+
 pip install -r requirements.txt
-streamlit run titanic_streamlit_app.py
-```
+
+
+### Run API
+
+uvicorn titanic_api:app --reload
+
+
+### Run Streamlit (API version)
+
+streamlit run titanic_streamlit_app_api.py
+
+## API Endpoints
+API_URL = https://ml-titanic-65cv.onrender.com/docs
+### POST /predict
+Input:
+
+{
+"Pclass": 1,
+"Sex": "female",
+"Age": 25,
+"Fare": 100,
+"Embarked": "S"
+}
+
+
+Output:
+
+{
+"prediction": 1,
+"probability": 0.89,
+"result": "Survived"
+}
+
+
+---
+
+### POST /shap
+
+Returns:
+- SHAP values
+- feature names
+- transformed data
+
+Used for plotting explanation in Streamlit
 
 ---
 
 ## What I learned
 
-* How to build end-to-end ML project
-* How to use Pipeline and ColumnTransformer
-* How to debug real deployment issues
-* Importance of matching library versions
-* Basics of explainable AI using SHAP
+- How to build ML pipeline properly
+- Difference between model vs pipeline prediction
+- How SHAP works with transformed features
+- Handling JSON ↔ numpy issues in API
+- Deploying ML app (Streamlit + FastAPI)
+- Debugging real issues (shape mismatch, SHAP errors)
 
 ---
 
 ## Future improvements
 
-* Improve UI
-* Add more features
-* Try other models
-* Deploy using FastAPI
+- Better SHAP explanation text
+- Global feature importance view
+- Reduce API cold start time
+- UI improvements
 
+---
 
-##Contact
-If you found this useful, feel free to shankambur@gmail.com
+## Author
+
+Shank Ambur

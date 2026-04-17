@@ -1,10 +1,10 @@
-print("Starting Titanic API...")
 from fastapi import FastAPI
 from pydantic import BaseModel
 import joblib
 import pandas as pd
 import shap
 import numpy as np
+print("Starting Titanic API...")
 
 app = FastAPI()
 
@@ -64,6 +64,8 @@ def home():
 # Prediction API
 @app.post("/predict")
 def predict(data: Passenger):
+    if model is None:
+     return {"error": "Model not loaded"}
 
     # Convert to DataFrame
     df = pd.DataFrame([data.dict()])
@@ -86,7 +88,8 @@ def predict(data: Passenger):
 #SHAP API
 @app.post("/shap")
 def shap_explain(data: Passenger):
-
+    if model is None:
+     return {"error": "Model not loaded"}
     df = pd.DataFrame([data.dict()])
 
     df["Sex"] = df["Sex"].str.lower()
