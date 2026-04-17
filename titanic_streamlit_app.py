@@ -10,10 +10,10 @@ print("sklearn:", sklearn.__version__)
 print("xgboost:", xgboost.__version__)
 print("shap:", shap.__version__)
 
-print("Start the streamlie******")
+print("Start the streamlite******")
 def clean_feature_name(name, value, input_data):
-    # print("clean_feature_name:Name:\n",name)
-    # print("clean_feature_name:Value:\n",value)
+    print("**clean_feature_name:Name:\n",name)
+    print("**clean_feature_name:Value:\n",value)
     name = name.replace("cat__", "").replace("num__", "")
 
     # 🎯 Numeric features → show original value
@@ -79,7 +79,7 @@ pipeline, preprocessor, model = load_model()
 
 @st.cache_resource
 def get_explainer(_model):
-    print("Creating SHAP explainer once...")
+    print("**Creating SHAP explainer once...")
     return shap.TreeExplainer(_model)
 
 explainer = get_explainer(model)
@@ -133,22 +133,22 @@ if pclass == 1 and fare < 20:
 # 🔮 Prediction
 if st.button("Predict"):
     # ✅ Transform input first
-    print("Transforming input")
-    print("input_data:\n",input_data)
+    print("**Transforming input")
+    print("**input_data:\n",input_data)
     input_data["Sex"] = input_data["Sex"].str.lower()
     input_data["Embarked"] = input_data["Embarked"].str.upper()
-    print("input_data_afterUC_LC:\n",input_data)
+    print("**input_data_afterUC_LC:\n",input_data)
     # X_transformed = preprocessor.transform(input_data)
     X_transformed = pipeline[:-1].transform(input_data)
-    print("X_transformed:\n",X_transformed)
+    print("**X_transformed:\n",X_transformed)
     # X_transformed_df = pd.DataFrame(X_transformed,columns=clean_names)
     X_transformed_df = pd.DataFrame(X_transformed,columns=pipeline[:-1].get_feature_names_out())
-    print("X_transformed_df:\n",X_transformed_df)
+    print("**X_transformed_df:\n",X_transformed_df)
     
 
     # ✅ Prediction
     with st.spinner("Predicting..."): prob = pipeline.predict_proba(input_data)[0][1]
-    print("prob:\n",prob)
+    print("**prob:\n",prob)
     pred = int(prob >= THRESHOLD)
     # st.write("Transformed Data:", X_transformed_df)
     st.subheader("Result")
@@ -171,35 +171,39 @@ if st.button("Predict"):
 
 
     shap_values = explainer(X_transformed_df)
+    print("**shap_values\n",shap_values)
     values = shap_values.values[0]
+    print("**values:\n",values)
     feature_names = X_transformed_df.columns
+    print("**feature_names:\n",feature_names)
 
     feature_impact = list(zip(feature_names, values))
 # Sort by absolute importance
     feature_impact = sorted(feature_impact, key=lambda x: abs(x[1]), reverse=True)
     st.markdown("### 🧠 Top Factors Influencing Prediction")
     st.markdown("---")
-    print("feature_impactAll:\n",feature_impact)
-    print("feature_impact.shape:",np.array(feature_impact).shape)
+    print("**feature_impactAll:\n",feature_impact)
+    print("**feature_impact.shape:",np.array(feature_impact).shape)
     filtered_features = []
     for name, val in feature_impact:
       value = X_transformed_df[name].iloc[0]
-      print("name :\n",name)
-      print("val :\n",val)
-      print("value:\n",value)
+      print("**name :\n",name)
+      print("**val :\n",val)
+      print("**value:\n",value)
       # Skip inactive one-hot features
       if ("Sex_" in name or "Pclass_" in name or "Embarked_" in name) and value == 0:
         continue
       clean_name = clean_feature_name(name,value,input_data)
+      print("**clean_name:\n",clean_name)
       if clean_name is not None:
         filtered_features.append((clean_name, val))
 
-      print("filtered_features:\n",filtered_features)
+      print("**filtered_features:\n",filtered_features)
 
     # 👉 Take top 3
     top_features = sorted(filtered_features, key=lambda x: abs(x[1]), reverse=True)[:3]
 
-    print("top_features:\n",top_features)
+    print("**top_features:\n",top_features)
 
     # 👉 Display
     for name, val in top_features:
@@ -226,6 +230,7 @@ if st.button("Predict"):
         show=False
     )
     st.pyplot(fig)
+    print("##################Transaction Completed ##############")
 
 
 
