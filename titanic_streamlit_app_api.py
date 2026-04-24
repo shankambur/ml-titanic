@@ -7,13 +7,13 @@ import numpy as np
 st.title("Titanic Prediction (API Version)")
 st.info("⏳ First request may take ~20–30 seconds (API waking up on Render)")
 
-PREDICTION_API_URL = "http://127.0.0.1:8000/predict"
-# PREDICTION_API_URL = "https://ml-titanic-65cv.onrender.com/predict"
+# PREDICTION_API_URL = "http://127.0.0.1:8000/predict"
+PREDICTION_API_URL = "https://ml-titanic-65cv.onrender.com/predict"
 print("PREDICTION_API_URL:",PREDICTION_API_URL)
 
 
-SHAP_API_URL = "http://127.0.0.1:8000/shap"
-# SHAP_API_URL = "https://ml-titanic-65cv.onrender.com/shap"
+# SHAP_API_URL = "http://127.0.0.1:8000/shap"
+SHAP_API_URL = "https://ml-titanic-65cv.onrender.com/shap"
 print("SHAP_API_URL:",SHAP_API_URL)
 
 def clean_feature_name(name, value, input_data):
